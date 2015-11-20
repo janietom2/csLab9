@@ -86,8 +86,7 @@ public class VideoGame {
 	 * about any video game
 	 ***********************************************************************/
 	public void Print() {
-		// your printing code goes here
-		// make sure that you follow instructions as shown in the lab assignment docx file
+		System.out.println("Video Game " + getName() + " is a " +  getCategory() +  " game. Its price is " + getPrice() + " and so far, " + getSoldItems() +  " items have been sold.");
 	}
 	
 }
