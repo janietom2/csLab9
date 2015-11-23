@@ -85,8 +85,8 @@ public class VideoGame {
 	 * Here we are asking you to design a method that prints the information
 	 * about any video game
 	 ***********************************************************************/
-	public void Print() {
-		System.out.println("Video Game " + getName() + " is a " +  getCategory() +  " game. Its price is " + getPrice() + " and so far, " + getSoldItems() +  " items have been sold.");
+	public String Print() {
+		return "Video Game " + getName() + " is a " +  getCategory() +  " game. Its price is " + getPrice() + " and so far, " + getSoldItems() +  " items have been sold.";
 	}
 	
 }

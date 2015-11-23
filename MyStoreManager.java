@@ -12,18 +12,28 @@ public class MyStoreManager {
 	 * It returns the array of video games. 
 	 ***********************************************************************************/
 	public static VideoGame[] ReadFromFile(String filename) throws IOException {
-		try{
+        int counterLines = 0;
+        VideoGame[] videoGames = new VideoGame[7];
+        
+        try{
 			fileScanner = new Scanner(new File(filename));
 		}catch (Exception e){
-            System.out.println("Error, please change the code or do something else, I don't now " +
-                    "=/, sorry, I am only a compiler.");
+            System.out.println("Error");
         }
-
         while(fileScanner.hasNext()){
+            String name = fileScanner.next();
+            String Sprice = fileScanner.next();
+            Double price = Double.parseDouble(Sprice);
+            String Ssold = fileScanner.next();
+            int sold = Integer.parseInt(Ssold);
+            String category = fileScanner.next();
 
+            VideoGame game = new VideoGame(name, price, sold, category);
+            videoGames[counterLines] = game;
+            counterLines++;
         }
-
-        return var;
+        fileScanner.close();
+        return videoGames;
 	}
 	
 	/**********************************************************************************
@@ -36,21 +46,25 @@ public class MyStoreManager {
 	public static void SortBySold(VideoGame[] myVideoGames) {
 		int max;
 		int index;
-		int aux;
+		int aux, aux2, aux3;
 
 		for (int size = myVideoGames.length-1; size >0; size--) {
-			max = myVideoGames[0];
+
+            max = myVideoGames[0].getSoldItems();
 			index = 0;
-			for (int i = 1; i <= size; i++) {
-				if (myVideoGames[i] > max) {
-					max = A[i];
+			for (int i = 0; i <= size; i++) {
+				if (myVideoGames[i].getSoldItems() > max) {
+					max = myVideoGames[i].getSoldItems();
 					index = i;
 				}
 			}
-			aux = A[index];
-			A[index] = A[size];
-			A[size] = aux;
+			aux = myVideoGames[index].getSoldItems();
+            aux2 = myVideoGames[size].getSoldItems();
+			aux = aux2;
+			aux2 = aux;
+            System.out.println(myVideoGames[index].getSoldItems());
 		}
+
 	}
 	
 	/**********************************************************************************
@@ -61,23 +75,27 @@ public class MyStoreManager {
 	 * – just modify it slightly.
 	 ***********************************************************************************/
 	public static void SortByPrice(VideoGame[] myVideoGames) {
-		int max;
-		int index;
-		int aux;
+        double max;
+        int index;
+        double aux, aux2, aux3;
 
-		for (int size = VideoGame.length-1; size >0; size--) {
-			max = VideoGame[0];
-			index = 0;
-			for (int i = 1; i <= size; i++) {
-				if (VideoGame[i] > max) {
-					max = VideoGame[i];
-					index = i;
-				}
-			}
-			aux = VideoGame[index];
-			VideoGame[index] = VideoGame[size];
-			VideoGame[size] = aux;
-		}
+        for (int size = myVideoGames.length-1; size > 0; size--) {
+
+            max = myVideoGames[0].getPrice();
+            index = 0;
+            for (int i = 1; i <= size; i++) {
+                if (myVideoGames[i].getPrice() > max) {
+                    max = myVideoGames[i].getPrice();
+                    index = i;
+                }
+            }
+            aux = myVideoGames[index].getPrice();
+            aux2 = myVideoGames[size].getPrice();
+            aux = aux2;
+            aux2 = aux;
+
+            System.out.println(aux2);
+        }
 	}
 
 	/**********************************************************************************
@@ -87,17 +105,21 @@ public class MyStoreManager {
 	 * Use the same selection sort algorithm as you implemented in lab8 
 	 * – just modify it slightly.
 	 ***********************************************************************************/
-	public static void SortByType(VideoGame[] myVideoGames) {
-		// here goes your code
-	}
+//	public static void SortByType(VideoGame[] myVideoGames) {
+//		// here goes your code
+//	}
 
 	/**********************************************************************************
 	 * TotalSales: 
 	 * This method takes an array of video games and returns the total amount of money 
 	 * gotten from sales of the video games. 
 	 ***********************************************************************************/
-	public static double TotalSales(VideoGame[] myVideoGames) {
-		// here goes your code
+	public static int TotalSales(VideoGame[] myVideoGames){
+        int sum = 0;
+        for (int counter = 0; counter < myVideoGames.length; counter++){
+            sum = sum + myVideoGames[counter].getSoldItems();
+        }
+        return sum;
 	}
 
 	/**********************************************************************************
@@ -105,7 +127,14 @@ public class MyStoreManager {
 	 * This method takes an array of video games and returns a randomly picked video game.
 	 ***********************************************************************************/
 	public static VideoGame Lottery(VideoGame[] myVideoGames) {
-		// here goes your code
+		Random randomNumber = new Random();
+        int pickedNumber = randomNumber.nextInt(7);
+
+        VideoGame pickedGame = new VideoGame(myVideoGames[pickedNumber].getName(),
+                myVideoGames[pickedNumber].getPrice(), myVideoGames[pickedNumber].getSoldItems(),
+                myVideoGames[pickedNumber].getCategory());
+
+        return pickedGame;
 	}
 	
 	/**********************************************************************************
@@ -113,8 +142,27 @@ public class MyStoreManager {
 	 * and in which you implement the scenario given to you in the lab assignment 
 	 * docx file.
 	 ***********************************************************************************/
-	public static void main(String[] args) {
-		// your code goes here
+	public static void main(String[] args) throws IOException {
+        Scanner userInput = new Scanner(System.in);
+        System.out.println("Hello sir/madame, please enter the .txt file that you would like to " +
+                "read (Do not enter .txt only the name)");
+        String userInputFile = userInput.nextLine();
+
+        //Lottery
+        System.out.println(Lottery(ReadFromFile(userInputFile+".txt")).Print());
+        System.out.println("----------------------------------");
+
+        //Sort by sold
+        SortBySold(ReadFromFile(userInputFile + ".txt"));
+        System.out.println("----------------------------------");
+
+        //TotalSales
+        System.out.println("Total of games sold: " + TotalSales(ReadFromFile(userInputFile+
+                ".txt")));
+        System.out.println("----------------------------------");
+
 	}
+
+
 
 }
