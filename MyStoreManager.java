@@ -1,9 +1,8 @@
 import java.io.*;
 import java.util.*;
-public class MyStoreManager {
 
+public class MyStoreManager {
     static Scanner fileScanner;
-	
 	/**********************************************************************************
 	 * ReadFromFile: 
 	 * This method takes the name of a file as parameter: the given file contains 
@@ -44,26 +43,21 @@ public class MyStoreManager {
 	 * – just modify it slightly.
 	 ***********************************************************************************/
 	public static void SortBySold(VideoGame[] myVideoGames) {
-		int max;
-		int index;
-		int aux, aux2, aux3;
-
+		VideoGame temp = new VideoGame();
+        VideoGame VideogameMax = new VideoGame();
 		for (int size = myVideoGames.length-1; size >0; size--) {
 
-            max = myVideoGames[0].getSoldItems();
-			index = 0;
-			for (int i = 0; i <= size; i++) {
-				if (myVideoGames[i].getSoldItems() > max) {
-					max = myVideoGames[i].getSoldItems();
-					index = i;
-				}
-			}
-			aux = myVideoGames[index].getSoldItems();
-            aux2 = myVideoGames[size].getSoldItems();
-			aux = aux2;
-			aux2 = aux;
-            System.out.println(myVideoGames[index].getSoldItems());
+			for (int i = 0; i < size; i++)
+                if (myVideoGames[i].getSoldItems() > myVideoGames[i + 1].getSoldItems()) {
+                    temp = myVideoGames[i];
+                    myVideoGames[i] = myVideoGames[i+1];
+                    myVideoGames[i+1] = temp;
+                }
 		}
+        for(int i = 0 ; i < myVideoGames.length-1; i++){
+            System.out.println(myVideoGames[i].getSoldItems()+" From: " +
+                    myVideoGames[i].getName());
+        }
 
 	}
 	
@@ -75,26 +69,19 @@ public class MyStoreManager {
 	 * – just modify it slightly.
 	 ***********************************************************************************/
 	public static void SortByPrice(VideoGame[] myVideoGames) {
-        double max;
-        int index;
-        double aux, aux2, aux3;
-
-        for (int size = myVideoGames.length-1; size > 0; size--) {
-
-            max = myVideoGames[0].getPrice();
-            index = 0;
-            for (int i = 1; i <= size; i++) {
-                if (myVideoGames[i].getPrice() > max) {
-                    max = myVideoGames[i].getPrice();
-                    index = i;
+        VideoGame temp = new VideoGame();
+        VideoGame VideogameMax = new VideoGame();
+        for (int size = myVideoGames.length-1; size >0; size--) {
+            for (int i = 0; i < size; i++)
+                if (myVideoGames[i].getPrice() > myVideoGames[i + 1].getPrice()) {
+                    temp = myVideoGames[i];
+                    myVideoGames[i] = myVideoGames[i+1];
+                    myVideoGames[i+1] = temp;
                 }
-            }
-            aux = myVideoGames[index].getPrice();
-            aux2 = myVideoGames[size].getPrice();
-            aux = aux2;
-            aux2 = aux;
-
-            System.out.println(aux2);
+         }
+        for(int i = 0 ; i < myVideoGames.length-1; i++){
+            System.out.println("$" + myVideoGames[i].getPrice() + " USD From: " +
+                    myVideoGames[i].getName());
         }
 	}
 
@@ -105,9 +92,23 @@ public class MyStoreManager {
 	 * Use the same selection sort algorithm as you implemented in lab8 
 	 * – just modify it slightly.
 	 ***********************************************************************************/
-//	public static void SortByType(VideoGame[] myVideoGames) {
-//		// here goes your code
-//	}
+	public static void SortByType(VideoGame[] myVideoGames) {
+        VideoGame temp = new VideoGame();
+        VideoGame VideogameMax = new VideoGame();
+        
+        for (int size = myVideoGames.length-1; size >0; size--) {
+            for (int i = 0; i < size; i++)
+                if (myVideoGames[i].getCategory().compareTo(myVideoGames[i+1].getCategory()) >  0) {
+                    temp = myVideoGames[i];
+                    myVideoGames[i] = myVideoGames[i+1];
+                    myVideoGames[i+1] = temp;
+                }
+        }
+        for(int i = 0 ; i < myVideoGames.length-1; i++){
+            System.out.println(myVideoGames[i].getCategory() + " From: " +
+                    myVideoGames[i].getName());
+        }
+    }
 
 	/**********************************************************************************
 	 * TotalSales: 
@@ -147,16 +148,25 @@ public class MyStoreManager {
         System.out.println("Hello sir/madame, please enter the .txt file that you would like to " +
                 "read (Do not enter .txt only the name)");
         String userInputFile = userInput.nextLine();
+        System.out.println("----------------------------------");
 
-        //Lottery
+        System.out.println("Lottery");
         System.out.println(Lottery(ReadFromFile(userInputFile+".txt")).Print());
         System.out.println("----------------------------------");
 
-        //Sort by sold
+        System.out.println("Sort by Sold");
         SortBySold(ReadFromFile(userInputFile + ".txt"));
         System.out.println("----------------------------------");
 
-        //TotalSales
+        System.out.println("Sort by Price");
+        SortByPrice(ReadFromFile(userInputFile + ".txt"));
+        System.out.println("----------------------------------");
+
+        System.out.println("Sort by Type");
+        SortByType(ReadFromFile(userInputFile + ".txt"));
+        System.out.println("----------------------------------");
+
+        System.out.println("Total Sales");
         System.out.println("Total of games sold: " + TotalSales(ReadFromFile(userInputFile+
                 ".txt")));
         System.out.println("----------------------------------");
